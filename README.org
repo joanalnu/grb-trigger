@@ -1,6 +1,6 @@
 #+TITLE: README
 
-* GRB-ML
+* GRB-TRIGGER
 
 Simulate CubeSat photon-count streams and benchmark gamma-ray burst (GRB) triggers on them: classical thresholds versus lightweight scikit-learn classifiers.
 
@@ -10,11 +10,11 @@ Simulate CubeSat photon-count streams and benchmark gamma-ray burst (GRB) trigge
 *Working name.* A package with the same name already exists on GitHub, so this project is likely to be renamed (roadmap task T-00).
 #+end_quote
 
-** What is GRB-ML?
+** What is GRB-TRIGGER?
 
 A GRB monitor on a small satellite has to decide, from photon counts alone and with very little computing power, whether a sudden rise in counts is a real burst worth alerting the community about (for example through [[https://gcn.nasa.gov/][GCN]]) or something else: a cosmic-ray hit, a pass through the [[https://en.wikipedia.org/wiki/South_Atlantic_Anomaly][South Atlantic Anomaly]] (SAA), or a Poisson fluctuation.
 
-GRB-ML is a small toolkit for studying that decision. It
+GRB-TRIGGER is a small toolkit for studying that decision. It
 
 1. *simulates* two-channel count streams (background, bursts, cosmic-ray spikes, SAA crossings),
 2. *extracts features* from rolling windows (signal-to-noise ratio, hardness ratio, peak-to-mean ratio, asymmetry), and
@@ -26,11 +26,11 @@ It is a research and teaching tool, not flight software. It does not assume a sp
 
 | Module                  | What it does                                                     | State                                                 |
 |-------------------------+------------------------------------------------------------------+-------------------------------------------------------|
-| ~grb_ml/simulations.py~ | Background, burst, cosmic-ray and SAA generators; event injector | Implemented, not yet unit-tested                      |
-| ~grb_ml/features.py~    | Window splitting and 7 features per window                       | Implemented; see known limitations                    |
-| ~grb_ml/dataset.py~     | Labels for each window; multi-orbit dataset builder              | ~generate_labels~ works; ~generate_dataset~ is a stub |
-| ~grb_ml/models.py~      | Threshold baseline and scikit-learn models                       | Empty                                                 |
-| ~grb_ml/evaluate.py~    | Metrics under a false-alarm budget                               | Empty                                                 |
+| ~grb_trigger/simulations.py~ | Background, burst, cosmic-ray and SAA generators; event injector | Implemented, not yet unit-tested                      |
+| ~grb_trigger/features.py~    | Window splitting and 7 features per window                       | Implemented; see known limitations                    |
+| ~grb_trigger/dataset.py~     | Labels for each window; multi-orbit dataset builder              | ~generate_labels~ works; ~generate_dataset~ is a stub |
+| ~grb_trigger/models.py~      | Threshold baseline and scikit-learn models                       | Empty                                                 |
+| ~grb_trigger/evaluate.py~    | Metrics under a false-alarm budget                               | Empty                                                 |
 
 *** Known limitations
 
@@ -43,8 +43,8 @@ It is a research and teaching tool, not flight software. It does not assume a sp
 Requires Python 3.12 or newer.
 
 #+begin_src bash
-git clone https://github.com/joanalnu/grb-ml.git
-cd grb-ml
+git clone https://github.com/joanalnu/GRB-TRIGGER.git
+cd GRB-TRIGGER
 pip install -e .
 pip install matplotlib scikit-learn   # for the examples, and for the models once they exist
 #+end_src
@@ -57,12 +57,12 @@ Simulate one orbit with three events, extract features and labels:
 
 #+begin_src python
 import numpy as np
-from grb_ml.simulations import (
+from grb_trigger.simulations import (
     generate_background, generate_grb_pulse, generate_false_alarm,
     generate_saa_crossing, detector_counts,
 )
-from grb_ml.features import feature_extraction_loop
-from grb_ml.dataset import generate_labels
+from grb_trigger.features import feature_extraction_loop
+from grb_trigger.dataset import generate_labels
 
 np.random.seed(42)
 n_bins = 1000
@@ -87,7 +87,7 @@ The 7 feature columns are: SNR (low channel), SNR (high channel), hardness ratio
 ** Project layout
 
 #+begin_src text
-grb_ml/
+grb_trigger/
   simulations.py   synthetic count streams
   features.py      rolling windows and feature extraction
   dataset.py       labels and (in progress) the multi-orbit dataset builder
